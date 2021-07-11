@@ -1,5 +1,6 @@
 package com.example.basicapp;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,8 +10,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import io.embrace.android.embracesdk.Embrace;
+
+
+
+
+
 
 public class MainActivity extends AppCompatActivity {
+
+
+
+
+
 
     private EditText eUsername;
     private EditText eUpassword;
@@ -32,11 +44,14 @@ public class MainActivity extends AppCompatActivity {
     private int counter = 5;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Embrace.getInstance().start(this);
+
+
+
 
 
         eUsername = findViewById(R.id.etUsername);
@@ -53,64 +68,60 @@ public class MainActivity extends AppCompatActivity {
                 String inputName = eUsername.getText().toString();
                 String inputPassword = eUpassword.getText().toString();
 
-                if(inputName.isEmpty() || inputPassword.isEmpty())
-                {
+                if (inputName.isEmpty() || inputPassword.isEmpty()) {
 
                     Toast.makeText(MainActivity.this, "Please Enter All The Details Correctly", Toast.LENGTH_SHORT).show();
 
-                }else{
+                } else {
 
                     isValid = validate(inputName, inputPassword);
 
-                    if(!isValid){
+                    if (!isValid) {
 
                         counter--;
 
                         //Toast.makeText(MainActivity.this, "Incorrect Username or Password", Toast.LENGTH_SHORT).show();
 
-                        eattempts.setText("No. of attempts left: "  + counter);
+                        eattempts.setText("No. of attempts left: " + counter);
 
                         // code for attempt counter to be added here
 
-                        if(counter == 0){
-                            eLogin.setEnabled(false); }
+                        if (counter == 0) {
+                            eLogin.setEnabled(false);
+                        } else {
 
-
-
-
-
-                 else{
-
-                     Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
                             //Code to go to the next page
 
-                      startActivity(new Intent(MainActivity.this, Homepage.class));
+                            startActivity(new Intent(MainActivity.this, Homepage.class));
+
+                            Embrace.getInstance().logError("There was an error!");
 
 
-                         }
+                        }
 
-                     }
+                    }
 
-                 }
                 }
+            }
+
 
 
         });
-
-
-
-    }
-
-    boolean validate(String inputName, String  inputPassword){
-
-    if(inputName.equalsIgnoreCase(Username) &&  inputPassword.equals(Password))
-
-    {
-        return true;
-
+            //uncomment if you want application to crash
+            //throw new RuntimeException("This is a crash");
 
     }
-      return false;
+
+    boolean validate(String inputName, String inputPassword) {
+
+        if (inputName.equalsIgnoreCase(Username) && inputPassword.equals(Password)) {
+            return true;
+
+
+        }
+        return false;
     }
 }
+
