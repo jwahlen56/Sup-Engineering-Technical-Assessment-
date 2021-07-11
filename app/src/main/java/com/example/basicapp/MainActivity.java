@@ -10,6 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import io.embrace.android.embracesdk.Embrace;
 
 
@@ -110,7 +114,17 @@ public class MainActivity extends AppCompatActivity {
 
         });
             //uncomment if you want application to crash
-            //throw new RuntimeException("This is a crash");
+        //throw new RuntimeException("This is a crash");
+
+            //Adds breadcrumbs
+            Embrace.getInstance().logBreadcrumb("onDragEvent called, starting drag");
+
+
+        Map<String, Object> props = new HashMap();
+        props.put("propertyA", "valueA");
+        props.put("propertyB", "valueB");
+
+        Embrace.getInstance().logError("Loading not finished in time.", props, false);
 
     }
 
